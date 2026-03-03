@@ -32,7 +32,7 @@ Work experience
   * Designed tempo-tracking pipeline robust to genre shifts, swing, and drift.
   * Provide technical leadership across research and product; mentor junior scientists/engineers.
 
-* June 2023 – August 2024: Research Scientist
+* June 2023 – October 2024: Research Scientist
   * Emobot, Paris, France
   * Led research on speech emotion recognition, increasing accuracy to 96%, impacting healthcare applications with real-time responsiveness.
   * Supervised research interns and junior researchers, leading projects from inception to prototype development.
