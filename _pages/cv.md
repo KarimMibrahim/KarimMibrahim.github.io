@@ -11,7 +11,7 @@ redirect_from:
 
 Education
 ======
-* Ph.D. in Computer Science, Télécom Paris, Polytechnic Institute of Paris, 2021
+* Ph.D. in Computer Science, Télécom Paris, Polytechnic Institute of Paris, 2022
   * Topic: Personalized Audio Auto-Tagging as Proxy for Contextual Music Recommendation
   * Supervisors: Dr. Gaël Richard, Dr. Geoffroy Peeters, Dr. Elena V. Epure
 * M.Sc. in Computer Science, National University of Singapore, 2018
