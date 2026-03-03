@@ -11,7 +11,7 @@ title                    : "Karim M. Ibrahim"
 title_separator          : "-"
 name                     : &name "Karim M. Ibrahim"
 description              : &description "Audio Research Scientist"
-url                      : https://karimmibrahim.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url                      : https://karimibrahim.com # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "KarimMibrahim/KarimMibrahim.github.io"
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
@@ -73,7 +73,7 @@ social:
 
 # Analytics
 analytics:
-  provider               :  "google-universal" # false (default), "google", "google-universal", "custom"
+  provider               : false # false (default), "google", "google-universal", "custom"
   google:
     tracking_id          :
 
@@ -82,11 +82,11 @@ analytics:
 author:
   name             : "Karim M. Ibrahim"
   avatar           : "profile.jpeg"
-  bio              : "Audio research scientist. Currently managing the R&D projects in Arkamys. Previously a Ph.D. student working on behavioural music analysis at Télécom Paris and Deezer"
-  location         : "Paris"
+  bio              : "Senior Audio Research Scientist at Serato. Previously Research Scientist at Emobot and Deezer, and R&D Project Manager at Arkamys. PhD from Télécom Paris."
+  location         : "Auckland, New Zealand"
   employer         :
   googlescholar    : "https://scholar.google.com/citations?user=Y5lfpv8AAAAJ&hl=en"
-  email            :
+  email            : "karim.m.ibraheem@gmail.com"
   researchgate     : 
   uri              :
   bitbucket        :
@@ -307,4 +307,3 @@ compress_html:
   ignore:
     envs: development
 
-theme: jekyll-theme-cayman

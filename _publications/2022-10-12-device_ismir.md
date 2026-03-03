@@ -6,7 +6,7 @@ excerpt: 'This paper proposes real-time predictions of the user listening contex
 date: 2022-10-12
 venue: '22nd International Society for Music Information Retrieval Conference (ISMIR)'
 ---
-In this paper, we address propose  real-time predictions of the user listening context, along with a personalized music auto-tagger to provide contextual recommendations based on the listening situation.
+In this paper, we propose real-time predictions of the user listening context, along with a personalized music auto-tagger to provide contextual recommendations based on the listening situation.
 
 [Download paper here](https://hal-insu.archives-ouvertes.fr/IDS/hal-03903647v1)
 
