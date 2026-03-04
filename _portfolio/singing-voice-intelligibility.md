@@ -3,6 +3,8 @@ title: "Singing Voice Intelligibility"
 excerpt: "For my M.Sc. at NUS, I studied what makes song lyrics easy or hard to understand, and built systems to measure it automatically — motivated by a real application: recommending music for language learning."
 collection: portfolio
 date: 2018-01-01
+header:
+  teaser: papers/iosl_results.png
 ---
 
 **Duration:** 2017 – 2018  
@@ -29,11 +31,32 @@ With labels in hand, we extracted a range of acoustic features from the vocal tr
 
 This second study (ISMIR 2018) took a broader lens, asking not just "how intelligible is this?" but "what makes a song more or less singable in the first place?" — which fed back into the recommendation use case.
 
----
+<div style="text-align:center">
+<figure class="figure w-100">
+  <img src="{{ '/images/papers/iosl_features.png' | relative_url }}" alt="Intelligibility features" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
+  <figcaption class="figure-caption text-center">
+  Acoustic features extracted from the vocal track used to estimate intelligibility, including spectral and temporal descriptors.
+  </figcaption>
+</figure>
+</div>
 
-*A figure from the ISMIR 2017 or ISMIR 2018 paper will be added here. You can drop an image into `images/` and reference it as `{{ '/images/your-figure.png' | relative_url }}`.*
+<div style="text-align:center">
+<figure class="figure w-100">
+  <img src="{{ '/images/papers/iosl_results.png' | relative_url }}" alt="Intelligibility classification results" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
+  <figcaption class="figure-caption text-center">
+  Confusion matrices for intelligibility classification across genres — the system distinguishes high, moderate, and low intelligibility levels.
+  </figcaption>
+</figure>
+</div>
 
----
+<div style="text-align:center">
+<figure class="figure w-100">
+  <img src="{{ '/images/papers/singability_factors.png' | relative_url }}" alt="Singability decision factors" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
+  <figcaption class="figure-caption text-center">
+  From the ISMIR 2018 study: the relative importance of different factors (genre, producibility, listenability, familiarity) when people select a song to sing, alongside the acoustic features that best predict singability.
+  </figcaption>
+</figure>
+</div>
 
 ## Publications
 

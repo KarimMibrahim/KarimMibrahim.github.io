@@ -8,7 +8,7 @@ venue: 'IEEE International Conference on Acoustics, Speech and Signal Processing
 ---
 In this paper, we propose using synthetic data augmentation through emotion conversion to improve the performance of speech emotion recognition models.
 
-[Download paper here](https://hal.science/hal-04416318)
+[Download paper here](https://hal.science/hal-04364976v1)
 
 Recommended citation:
 Ibrahim, K. M., Perzo, A., Leglaive, S. "Towards Improving Speech Emotion Recognition Using Synthetic Data Augmentation from Emotion Conversion." <i>IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)</i>, Seoul, Korea, 2024.

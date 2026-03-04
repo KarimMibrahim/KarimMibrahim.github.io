@@ -3,6 +3,8 @@ title: "Primary-Ambient Source Separation"
 excerpt: "My first research project, spanning my M.Sc. at Nile University and an internship at Sony Stuttgart. The goal: automatically separate the direct sound from the diffuse ambience in a stereo recording, to enable surround sound upmixing."
 collection: portfolio
 date: 2016-01-01
+header:
+  teaser: papers/pae_pca_diagram.png
 ---
 
 **Duration:** 2015 – 2018  
@@ -34,11 +36,32 @@ The second study replaced the classical signal processing pipeline with a **neur
 
 This work was done during my thesis internship at Sony's Stuttgart Technology Center, where the application to real product development was direct.
 
----
+<div style="text-align:center">
+<figure class="figure w-100">
+  <img src="{{ '/images/papers/pae_pca_diagram.png' | relative_url }}" alt="Block diagram of the stereo-to-surround upmixing system" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
+  <figcaption class="figure-caption text-center">
+  From SMC 2016: block diagram of the primary-ambient extraction system used for stereo-to-5.1 surround sound upmixing, showing the adaptive PCA-based separation stage.
+  </figcaption>
+</figure>
+</div>
 
-*A figure from the SMC 2016 or ICASSP 2018 paper will be added here. You can drop an image into `images/` and reference it as `{{ '/images/your-figure.png' | relative_url }}`.*
+<div style="text-align:center">
+<figure class="figure w-100">
+  <img src="{{ '/images/papers/pae_nn_diagram.png' | relative_url }}" alt="Neural network approach to primary-ambient separation" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
+  <figcaption class="figure-caption text-center">
+  From ICASSP 2018: the neural network architecture for primary-ambient separation, alongside a comparison of subjective evaluation scores across methods.
+  </figcaption>
+</figure>
+</div>
 
----
+<div style="text-align:center">
+<figure class="figure w-100">
+  <img src="{{ '/images/papers/pae_pca_results.png' | relative_url }}" alt="PAE evaluation results" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
+  <figcaption class="figure-caption text-center">
+  Evaluation results comparing the proposed PCA-based method against prior approaches, measured on ambient-dominant and primary-dominant test signals.
+  </figcaption>
+</figure>
+</div>
 
 ## Publications
 

@@ -1,8 +1,10 @@
 ---
-title: "Speech Emotion Recognition"
+title: "Mood Monitoring with Speech Emotion Recognition"
 excerpt: "At Emobot, I led research on automatic speech emotion recognition — pushing accuracy significantly through synthetic data augmentation via emotion conversion, with direct impact on a real-time healthcare application."
 collection: portfolio
 date: 2024-01-01
+header:
+  teaser: papers/ser_architecture.png
 ---
 
 **Duration:** 2023 – 2024  
@@ -28,12 +30,24 @@ We showed that with the right augmentation strategy, synthetic emotion data prov
 
 The work fed directly into a real-time emotion monitoring application in a healthcare context, where the system analyses patient speech to support clinical assessment. Improving accuracy here is not just a benchmark exercise — it has real implications for how well the system can support practitioners.
 
----
+<div style="text-align:center">
+<figure class="figure w-100">
+  <img src="{{ '/images/papers/ser_architecture.png' | relative_url }}" alt="SER system architecture" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
+  <figcaption class="figure-caption text-center">
+  The proposed system: a speech emotion conversion model generates synthetic training data, which augments the dataset for fine-tuning a wav2vec 2.0 emotion recognition model.
+  </figcaption>
+</figure>
+</div>
 
-*A figure from the ICASSP 2024 paper will be added here. You can drop an image into `images/` and reference it as `{{ '/images/your-figure.png' | relative_url }}`.*
-
----
+<div style="text-align:center">
+<figure class="figure w-100">
+  <img src="{{ '/images/papers/ser_results.png' | relative_url }}" alt="SER results" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
+  <figcaption class="figure-caption text-center">
+  Recognition accuracy on IEMOCAP and RAVDESS, comparing models trained on original data, synthetic data, and the combined augmented set.
+  </figcaption>
+</figure>
+</div>
 
 ## Publication
 
-- Ibrahim, K. M., Perzo, A., Leglaive, S. [Towards Improving Speech Emotion Recognition Using Synthetic Data Augmentation from Emotion Conversion](https://hal.science/hal-04416318). *ICASSP 2024, Seoul.*
+- Ibrahim, K. M., Perzo, A., Leglaive, S. [Towards Improving Speech Emotion Recognition Using Synthetic Data Augmentation from Emotion Conversion](https://hal.science/hal-04364976v1). *ICASSP 2024, Seoul.*
