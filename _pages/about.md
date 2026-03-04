@@ -37,7 +37,7 @@ Prior to joining Télécom Paris, I graduated with a M.Sc. in Computer Science f
 
 **2022-12-04** &nbsp; Paper published at [ISMIR 2022](https://ismir2022.ismir.net/): *Exploiting Device and Audio Data to Tag Music with User-Aware Listening Contexts*. [[PDF]](https://hal-insu.archives-ouvertes.fr/IDS/hal-03903647v1)
 
-**2021-12-15** &nbsp; Successfully defended my PhD at Télécom Paris on personalised contextual music recommendation! [[Thesis]](https://theses.hal.science/tel-03669555)
+**2021-12-15** &nbsp; Successfully defended my PhD at Télécom Paris on personalised contextual music recommendation! [[Thesis]](https://theses.hal.science/tel-03633097/)
 
 **2020-10-12** &nbsp; Paper published at [ISMIR 2020](https://ismir2020.ismir.net/): *Should we consider the users in contextual music auto-tagging models?* [[PDF]](https://hal.telecom-paris.fr/hal-02934433/)
 
