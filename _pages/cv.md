@@ -22,13 +22,12 @@ Education
   * Award: Best Thesis Award
   * Supervisors: Dr. Mahmoud Allam, Dr. Stefan Uhlich
 * B.Sc. in Electronics Engineering, Fayoum University, 2014
-  * Class Rank: 1st
 
 Work experience
 ======
 * May 2025 – Present: Senior Audio Research Scientist
   * Serato, Auckland, New Zealand
-  * Lead R&D for next-gen beat detection and low-latency stem separation powering Serato creator products (e.g., Serato DJ Pro, Serato Studio).
+  * Develop next-gen beat detection and low-latency stem separation powering Serato creator products (e.g., Serato DJ Pro, Serato Studio).
   * Designed tempo-tracking pipeline robust to genre shifts, swing, and drift.
   * Provide technical leadership across research and product; mentor junior scientists/engineers.
 
