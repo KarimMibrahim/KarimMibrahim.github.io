@@ -4,7 +4,7 @@ excerpt: "For my M.Sc. at NUS, I studied what makes song lyrics easy or hard to 
 collection: portfolio
 date: 2018-01-01
 header:
-  teaser: papers/iosl_results.png
+  teaser: papers/iosl_confusion.png
 ---
 
 **Duration:** 2017 – 2018  
@@ -33,18 +33,18 @@ This second study (ISMIR 2018) took a broader lens, asking not just "how intelli
 
 <div style="text-align:center">
 <figure class="figure w-100">
-  <img src="{{ '/images/papers/iosl_features.png' | relative_url }}" alt="Intelligibility features" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
+  <img src="{{ '/images/papers/iosl_confusion.png' | relative_url }}" alt="Intelligibility classification confusion matrix" class="figure-img img-fluid mx-auto d-flex" style="max-width:600px">
   <figcaption class="figure-caption text-center">
-  Acoustic features extracted from the vocal track used to estimate intelligibility, including spectral and temporal descriptors.
+  Fig. 2 from ISMIR 2017: confusion matrix of the SVM model predicting high, moderate, and low intelligibility levels from acoustic features.
   </figcaption>
 </figure>
 </div>
 
 <div style="text-align:center">
 <figure class="figure w-100">
-  <img src="{{ '/images/papers/iosl_results.png' | relative_url }}" alt="Intelligibility classification results" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
+  <img src="{{ '/images/papers/iosl_genres.png' | relative_url }}" alt="Per-genre intelligibility confusion matrices" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
   <figcaption class="figure-caption text-center">
-  Confusion matrices for intelligibility classification across genres — the system distinguishes high, moderate, and low intelligibility levels.
+  Fig. 3 from ISMIR 2017: per-genre confusion matrices — intelligibility prediction behaves differently across Rock, Classical, Folk, R&B, and Jazz.
   </figcaption>
 </figure>
 </div>
@@ -53,7 +53,7 @@ This second study (ISMIR 2018) took a broader lens, asking not just "how intelli
 <figure class="figure w-100">
   <img src="{{ '/images/papers/singability_factors.png' | relative_url }}" alt="Singability decision factors" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
   <figcaption class="figure-caption text-center">
-  From the ISMIR 2018 study: the relative importance of different factors (genre, producibility, listenability, familiarity) when people select a song to sing, alongside the acoustic features that best predict singability.
+  From ISMIR 2018: relative importance of factors people consider when selecting a song to sing — including genre, producibility, listenability, and familiarity.
   </figcaption>
 </figure>
 </div>

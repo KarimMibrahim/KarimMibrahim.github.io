@@ -40,25 +40,25 @@ This work was done during my thesis internship at Sony's Stuttgart Technology Ce
 <figure class="figure w-100">
   <img src="{{ '/images/papers/pae_pca_diagram.png' | relative_url }}" alt="Block diagram of the stereo-to-surround upmixing system" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
   <figcaption class="figure-caption text-center">
-  From SMC 2016: block diagram of the primary-ambient extraction system used for stereo-to-5.1 surround sound upmixing, showing the adaptive PCA-based separation stage.
+  Fig. 1 from SMC 2016: block diagram of the full stereo-to-5.1 upmixing pipeline, with the adaptive PCA-based primary-ambient extraction stage at its core.
   </figcaption>
 </figure>
 </div>
 
 <div style="text-align:center">
 <figure class="figure w-100">
-  <img src="{{ '/images/papers/pae_nn_diagram.png' | relative_url }}" alt="Neural network approach to primary-ambient separation" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
+  <img src="{{ '/images/papers/pae_nn_arch.png' | relative_url }}" alt="Neural network feature extraction for primary-ambient separation" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
   <figcaption class="figure-caption text-center">
-  From ICASSP 2018: the neural network architecture for primary-ambient separation, alongside a comparison of subjective evaluation scores across methods.
+  Fig. 1 from ICASSP 2018: how the input stereo STFT is structured into feature vectors for the neural network, splitting real and imaginary parts across left and right channels with temporal context.
   </figcaption>
 </figure>
 </div>
 
 <div style="text-align:center">
 <figure class="figure w-100">
-  <img src="{{ '/images/papers/pae_pca_results.png' | relative_url }}" alt="PAE evaluation results" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
+  <img src="{{ '/images/papers/pae_nn_results.png' | relative_url }}" alt="PAE methods comparison" class="figure-img img-fluid mx-auto d-flex" style="max-width:700px">
   <figcaption class="figure-caption text-center">
-  Evaluation results comparing the proposed PCA-based method against prior approaches, measured on ambient-dominant and primary-dominant test signals.
+  From ICASSP 2018: subjective evaluation scores comparing the neural network approach against PCA and other prior methods across listeners.
   </figcaption>
 </figure>
 </div>
