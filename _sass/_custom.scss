@@ -1,0 +1,198 @@
+/* ==========================================================================
+   CUSTOM ENHANCEMENTS
+   ========================================================================== */
+
+/*
+   Typography refinements
+   ========================================================================== */
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+
+/*
+   Page content link styles — elegant underline animation
+   ========================================================================== */
+
+.page__content a {
+  text-decoration: none;
+  color: $link-color;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1.5px;
+  transition: background-size 0.25s ease, color 0.2s ease;
+
+  &:hover {
+    color: $link-color-hover;
+    background-size: 100% 1.5px;
+    text-decoration: none;
+  }
+}
+
+
+/*
+   Section headings with left accent
+   ========================================================================== */
+
+.page__content h2 {
+  position: relative;
+  padding-left: 0.75em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid $border-color;
+  border-left: 4px solid $info-color;
+  margin-left: -0.75em;
+  font-size: $type-size-4;
+  color: $primary-color;
+}
+
+.page__content h3 {
+  color: mix($primary-color, $text-color, 50%);
+  font-size: $type-size-5;
+}
+
+
+/*
+   News / date badges in about page
+   — targets bold dates like **2025-05-01**
+   ========================================================================== */
+
+.page__content p > strong:first-child {
+  display: inline-block;
+  font-size: $type-size-7;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: $info-color;
+  background-color: mix(#fff, $info-color, 88%);
+  border: 1px solid mix(#fff, $info-color, 60%);
+  padding: 1px 7px;
+  border-radius: 4px;
+  vertical-align: middle;
+  margin-right: 2px;
+}
+
+
+/*
+   Sidebar author URLs — icon links
+   ========================================================================== */
+
+.author__urls a {
+  transition: color 0.2s ease, padding-left 0.2s ease;
+
+  &:hover {
+    padding-left: 4px;
+    color: $info-color;
+    text-decoration: none !important;
+  }
+}
+
+
+/*
+   Masthead site title
+   ========================================================================== */
+
+.site-title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-size: 1.1em;
+}
+
+
+/*
+   Archive / publication items
+   ========================================================================== */
+
+.archive__item-title {
+  font-weight: 600;
+  font-size: $type-size-5;
+  letter-spacing: -0.01em;
+
+  a {
+    text-decoration: none;
+    color: $text-color;
+
+    &:hover {
+      color: $link-color;
+    }
+  }
+}
+
+.archive__item-excerpt {
+  font-size: $type-size-6;
+  color: $gray;
+  line-height: 1.6;
+  margin-top: 0.25em;
+}
+
+
+/*
+   Publication list items
+   ========================================================================== */
+
+.list__item {
+  padding: 1em 0;
+  border-bottom: 1px solid $border-color;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+
+/*
+   Smooth scrollbar + selection color
+   ========================================================================== */
+
+::selection {
+  background-color: mix(#fff, $info-color, 70%);
+  color: $text-color;
+}
+
+::-moz-selection {
+  background-color: mix(#fff, $info-color, 70%);
+  color: $text-color;
+}
+
+
+/*
+   Blockquote refinement
+   ========================================================================== */
+
+blockquote {
+  border-left-color: $info-color;
+  border-left-width: 3px;
+  background-color: mix(#fff, $info-color, 95%);
+  border-radius: 0 $border-radius $border-radius 0;
+  padding: 0.75em 1.25em;
+  margin: 1.5em 0;
+  font-style: normal;
+  color: $dark-gray;
+}
+
+
+/*
+   Code block improvements
+   ========================================================================== */
+
+.highlight {
+  border-radius: $border-radius;
+  border: 1px solid $border-color;
+}
+
+p > code,
+a > code,
+li > code,
+td > code {
+  color: mix(#000, $info-color, 20%);
+  background: mix(#fff, $info-color, 93%);
+  border-color: mix(#fff, $info-color, 75%);
+  font-size: 0.875em;
+}
