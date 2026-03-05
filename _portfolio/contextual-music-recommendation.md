@@ -4,7 +4,7 @@ excerpt: "My PhD project at Télécom Paris and Deezer, studying how listening c
 collection: portfolio
 date: 2022-01-01
 header:
-  teaser: context/banner.png
+  teaser: teasers/context-teaser.jpg
 ---
 
 **Duration:** 2018 – 2022  

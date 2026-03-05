@@ -4,7 +4,7 @@ excerpt: "At Emobot, I led research on automatic speech emotion recognition — 
 collection: portfolio
 date: 2024-01-01
 header:
-  teaser: papers/ser_arch.png
+  teaser: teasers/ser-teaser.jpg
 ---
 
 **Duration:** 2023 – 2024  

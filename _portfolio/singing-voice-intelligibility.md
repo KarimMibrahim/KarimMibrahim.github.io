@@ -4,7 +4,7 @@ excerpt: "For my M.Sc. at NUS, I studied what makes song lyrics easy or hard to 
 collection: portfolio
 date: 2018-01-01
 header:
-  teaser: papers/iosl_confusion.png
+  teaser: teasers/singing-teaser.jpg
 ---
 
 **Duration:** 2017 – 2018  

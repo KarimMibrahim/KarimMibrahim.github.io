@@ -4,7 +4,7 @@ collection: publications
 permalink: /publication/singability
 excerpt: 'This paper is about estimating the singability of a given song and the factors that make one song more singable than another. We propose a number of acoustic features to automatically estimate the singability of a song.'
 date: 2018-10-01
-venue: 'The 19th International Society for Music Information Retrieval Conference (ISMIR), 2018'
+venue: 'The 19th International Society for Music Information Retrieval Conference (ISMIR)'
 ---
 This paper is about estimating the singability of a given song and the factors that make one song more singable than another. We propose a number of acoustic features to automatically estimate the singability of a song.
 

@@ -4,7 +4,7 @@ excerpt: "My first research project, spanning my M.Sc. at Nile University and an
 collection: portfolio
 date: 2016-01-01
 header:
-  teaser: papers/pae_pca_diagram.png
+  teaser: teasers/pae-teaser.jpg
 ---
 
 **Duration:** 2015 – 2018  

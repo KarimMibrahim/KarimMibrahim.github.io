@@ -1,4 +1,5 @@
 ---
+published: false
 title: 'What am I doing?'
 date: 2019-02-25
 permalink: /posts/2019/02/mir/

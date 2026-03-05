@@ -4,7 +4,7 @@ collection: publications
 permalink: /publication/ser_icassp
 excerpt: 'This paper proposes using synthetic data augmentation via emotion conversion to improve speech emotion recognition models.'
 date: 2024-04-01
-venue: 'IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP), 2024'
+venue: 'IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)'
 ---
 In this paper, we propose using synthetic data augmentation through emotion conversion to improve the performance of speech emotion recognition models.
 
