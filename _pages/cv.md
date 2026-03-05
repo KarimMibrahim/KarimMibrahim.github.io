@@ -155,8 +155,88 @@ redirect_from:
 
 ---
 
-## Publications
+## Selected Publications
 
-<ul>{% for post in site.publications %}
-  {% include archive-single-cv.html %}
-{% endfor %}</ul>
+<ul class="cv-pub-list">
+  <li>Ibrahim, K. M., Perzo, A., Leglaive, S. "<a href="/publication/ser_icassp">Towards Improving Speech Emotion Recognition Using Synthetic Data Augmentation from Emotion Conversion.</a>" <em>ICASSP 2024</em>, Seoul, Korea.</li>
+  <li>Ibrahim, K. M., Epure, E. V., Peeters, G., Richard, G. "<a href="/publication/device_ismir">Exploiting Device and Audio Data to Tag Music with User-Aware Listening Contexts.</a>" <em>ISMIR 2022</em>, Bengaluru, India.</li>
+  <li>Ibrahim, K. M., Epure, E. V., Peeters, G., Richard, G. "<a href="/publication/user_ismir">Should we consider the users in contextual music auto-tagging models?</a>" <em>ISMIR 2020</em>, Montreal, Canada.</li>
+  <li>Ibrahim, K. M., Epure, E. V., Peeters, G., Richard, G. "<a href="/publication/mlml_icmr">Confidence-based Weighted Loss for Multi-label Classification with Missing Labels.</a>" <em>ICMR 2020</em>, Dublin, Ireland.</li>
+  <li>Ibrahim, K. M., Royo-Letelier, J., Epure, E. V., Peeters, G., Richard, G. "<a href="/publication/context_icassp">Audio-Based Auto-Tagging With Contextual Tags for Music.</a>" <em>ICASSP 2020</em>, Barcelona, Spain.</li>
+</ul>
+
+---
+
+## Achievements
+
+<div class="cv-timeline">
+
+  <div class="cv-entry">
+    <div class="cv-entry__date">2018</div>
+    <div class="cv-entry__body">
+      <div class="cv-entry__role">Marie Skłodowska-Curie Fellowship</div>
+    </div>
+  </div>
+
+  <div class="cv-entry">
+    <div class="cv-entry__date">2017</div>
+    <div class="cv-entry__body">
+      <div class="cv-entry__role">Singapore International Graduate Award (SINGA)</div>
+    </div>
+  </div>
+
+  <div class="cv-entry">
+    <div class="cv-entry__date">2016</div>
+    <div class="cv-entry__body">
+      <div class="cv-entry__role">Best Thesis Award</div>
+      <div class="cv-entry__org">Nile University</div>
+    </div>
+  </div>
+
+  <div class="cv-entry">
+    <div class="cv-entry__date">2013</div>
+    <div class="cv-entry__body">
+      <div class="cv-entry__role">Award of Distinction</div>
+      <div class="cv-entry__org">Fayoum University</div>
+    </div>
+  </div>
+
+</div>
+
+---
+
+## Skills
+
+<dl class="cv-skills">
+  <dt>Technical</dt>
+  <dd>Python · PyTorch · TensorFlow · Signal Processing · Machine Learning</dd>
+  <dt>Research</dt>
+  <dd>Experimental Design · Data Collection &amp; Analysis · Model Evaluation · Visualizations</dd>
+  <dt>Soft Skills</dt>
+  <dd>Project Management · Team Leadership · Mentorship · Communication · Public Speaking</dd>
+  <dt>Hobbies</dt>
+  <dd>Guitar · Drums · Squash · Football</dd>
+</dl>
+
+---
+
+## Languages
+
+<ul class="cv-lang-list">
+  <li>
+    <span class="cv-lang__name">Arabic</span>
+    <span class="cv-lang__level cv-lang__level--high">Native</span>
+  </li>
+  <li>
+    <span class="cv-lang__name">English</span>
+    <span class="cv-lang__level cv-lang__level--high">Fluent</span>
+  </li>
+  <li>
+    <span class="cv-lang__name">French</span>
+    <span class="cv-lang__level cv-lang__level--mid">B2</span>
+  </li>
+  <li>
+    <span class="cv-lang__name">German</span>
+    <span class="cv-lang__level cv-lang__level--low">A2</span>
+  </li>
+</ul>

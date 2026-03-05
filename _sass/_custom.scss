@@ -232,7 +232,7 @@ h1, h2, h3, h4, h5, h6 {
     content: '';
     position: absolute;
     /* rem keeps this in sync with the date column width below */
-    left: 7.5rem;
+    left: 9rem;
     top: 0.6em;
     bottom: 0.5em;
     width: 2px;
@@ -250,7 +250,7 @@ h1, h2, h3, h4, h5, h6 {
   &__date {
     /* rem avoids the em-resolves-to-own-font-size trap:
        flex: 0 0 7.5em with font-size:.6875em would give 82.5px, not 120px */
-    flex: 0 0 7.5rem;
+    flex: 0 0 9rem;
     text-align: right;
     padding-right: 1.25rem;
     padding-top: 0.1em;
@@ -258,6 +258,7 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
     color: $info-color;
     line-height: 1.5;
+    white-space: nowrap;
   }
 
   &__body {
@@ -329,6 +330,110 @@ h1, h2, h3, h4, h5, h6 {
 
       &:before { display: none; }
     }
+  }
+}
+
+
+/*
+   CV — Selected Publications
+   ========================================================================== */
+
+.cv-pub-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5em 0 0;
+
+  li {
+    font-size: $type-size-6;
+    padding: 0.5em 0;
+    border-bottom: 1px solid $border-color;
+    line-height: 1.55;
+    color: $text-color;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    em {
+      font-style: normal;
+      font-weight: 600;
+      color: $info-color;
+    }
+  }
+}
+
+
+/*
+   CV — Skills
+   ========================================================================== */
+
+.cv-skills {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: 0.5em 1em;
+  margin: 0.5em 0 0;
+  font-size: $type-size-6;
+
+  dt {
+    font-weight: 600;
+    color: $primary-color;
+    padding-top: 0.15em;
+  }
+
+  dd {
+    margin: 0;
+    color: $gray;
+    line-height: 1.6;
+  }
+}
+
+
+/*
+   CV — Languages
+   ========================================================================== */
+
+.cv-lang-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5em 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75em;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+}
+
+.cv-lang__name {
+  font-size: $type-size-6;
+  font-weight: 600;
+  color: $primary-color;
+}
+
+.cv-lang__level {
+  font-size: $type-size-7;
+  font-weight: 500;
+  padding: 0.15em 0.65em;
+  border-radius: 2em;
+  background: mix(#fff, $gray, 85%);
+  color: $gray;
+
+  &--high {
+    background: mix(#fff, $info-color, 82%);
+    color: mix(#000, $info-color, 20%);
+  }
+
+  &--mid {
+    background: mix(#fff, $info-color, 90%);
+    color: mix(#000, $info-color, 35%);
+  }
+
+  &--low {
+    background: mix(#fff, $gray, 88%);
+    color: $gray;
   }
 }
 
