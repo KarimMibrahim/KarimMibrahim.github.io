@@ -9,7 +9,7 @@ redirect_from:
 ---
 
 <div class="profile-hero">
-  <div class="profile-hero__tagline">Researcher working at the intersection of AI, audio, and music.</div>
+  <div class="profile-hero__tagline">Researcher working at the intersection of AI and music.</div>
   <div class="profile-hero__meta">
     <span class="profile-hero__location">📍 Auckland, New Zealand</span>
   </div>
@@ -17,7 +17,6 @@ redirect_from:
     <span class="profile-hero__tag">Audio Source Separation</span>
     <span class="profile-hero__tag">Music Information Retrieval</span>
     <span class="profile-hero__tag">Speech &amp; Emotion</span>
-    <span class="profile-hero__tag">Beat Detection</span>
     <span class="profile-hero__tag">Deep Learning</span>
   </div>
 </div>
