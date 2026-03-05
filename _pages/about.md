@@ -8,6 +8,20 @@ redirect_from:
   - /about.html
 ---
 
+<div class="profile-hero">
+  <div class="profile-hero__tagline">Researcher working at the intersection of AI, audio, and music.</div>
+  <div class="profile-hero__meta">
+    <span class="profile-hero__location">📍 Auckland, New Zealand</span>
+  </div>
+  <div class="profile-hero__tags">
+    <span class="profile-hero__tag">Audio Source Separation</span>
+    <span class="profile-hero__tag">Music Information Retrieval</span>
+    <span class="profile-hero__tag">Speech &amp; Emotion</span>
+    <span class="profile-hero__tag">Beat Detection</span>
+    <span class="profile-hero__tag">Deep Learning</span>
+  </div>
+</div>
+
 Hi! You have reached my webpage. Here, it's about science and music.
 
 I am an audio research scientist working on AI for audio and music. Currently, I am a Senior Audio Research Scientist at [Serato](https://serato.com/) in Auckland, New Zealand, where I research next-generation beat detection and low-latency stem separation for DJ and music production tools.

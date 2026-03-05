@@ -148,6 +148,185 @@ h1, h2, h3, h4, h5, h6 {
 
 
 /*
+   Navigation active state
+   ========================================================================== */
+
+.greedy-nav .visible-links a.masthead-active {
+  color: #fff;
+
+  &:before {
+    -webkit-transform: scaleX(1);
+        -ms-transform: scaleX(1);
+            transform: scaleX(1);
+    background: rgba(255, 255, 255, 0.6);
+  }
+}
+
+
+/*
+   About page hero strip
+   ========================================================================== */
+
+.profile-hero {
+  padding: 1.25em 0 1.75em;
+  margin-bottom: 1.5em;
+  border-bottom: 1px solid $border-color;
+
+  &__tagline {
+    font-size: $type-size-4;
+    font-weight: 500;
+    color: $primary-color;
+    margin: 0 0 0.5em;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  &__meta {
+    margin-bottom: 1em;
+  }
+
+  &__location {
+    font-size: $type-size-6;
+    color: $gray;
+    font-weight: 500;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45em;
+  }
+
+  &__tag {
+    display: inline-block;
+    font-size: $type-size-7;
+    font-weight: 500;
+    color: $primary-color;
+    background: mix(#fff, $primary-color, 93%);
+    border: 1px solid mix(#fff, $primary-color, 72%);
+    padding: 0.3em 0.8em;
+    border-radius: 2em;
+    letter-spacing: 0.02em;
+    transition: background 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background: mix(#fff, $primary-color, 82%);
+      color: $primary-color;
+    }
+  }
+}
+
+
+/*
+   CV Timeline
+   ========================================================================== */
+
+.cv-timeline {
+  position: relative;
+  padding: 0.25em 0 0.5em;
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 7.5em;
+    top: 0.6em;
+    bottom: 0.5em;
+    width: 2px;
+    background: linear-gradient(to bottom, $info-color, mix(#fff, $info-color, 70%));
+    border-radius: 2px;
+  }
+}
+
+.cv-entry {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.75em;
+  position: relative;
+
+  &__date {
+    flex: 0 0 7.5em;
+    text-align: right;
+    padding-right: 1.25em;
+    padding-top: 0.1em;
+    font-size: $type-size-7;
+    font-weight: 600;
+    color: $info-color;
+    line-height: 1.5;
+  }
+
+  &__body {
+    flex: 1;
+    padding-left: 1.5em;
+    position: relative;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: -0.45em;
+      top: 0.35em;
+      width: 0.8em;
+      height: 0.8em;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid $info-color;
+      box-shadow: 0 0 0 3px mix(#fff, $info-color, 80%);
+    }
+
+    ul {
+      margin-top: 0.4em;
+      margin-bottom: 0;
+      padding-left: 1.1em;
+
+      li {
+        font-size: $type-size-6;
+        color: $gray;
+        margin-bottom: 0.3em;
+        line-height: 1.5;
+      }
+    }
+  }
+
+  &__role {
+    font-size: $type-size-5;
+    font-weight: 700;
+    color: $primary-color;
+    margin: 0 0 0.2em;
+    line-height: 1.3;
+  }
+
+  &__org {
+    font-size: $type-size-6;
+    color: $gray;
+    font-weight: 500;
+    margin-bottom: 0.1em;
+  }
+}
+
+/* Stack on small screens */
+@media (max-width: 600px) {
+  .cv-timeline:before { display: none; }
+
+  .cv-entry {
+    flex-direction: column;
+    gap: 0.2em;
+
+    &__date {
+      text-align: left;
+      flex: none;
+      padding-right: 0;
+      padding-bottom: 0.1em;
+    }
+
+    &__body {
+      padding-left: 0;
+
+      &:before { display: none; }
+    }
+  }
+}
+
+
+/*
    Smooth scrollbar + selection color
    ========================================================================== */
 
@@ -195,4 +374,97 @@ td > code {
   background: mix(#fff, $info-color, 93%);
   border-color: mix(#fff, $info-color, 75%);
   font-size: 0.875em;
+}
+
+
+/*
+   Portfolio card grid
+   ========================================================================== */
+
+.grid__wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5em;
+  margin-top: 1em;
+}
+
+.grid__item {
+  /* override Susy float-based sizing */
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  float: none !important;
+  margin-bottom: 0;
+
+  .archive__item {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid $border-color;
+    border-radius: $border-radius * 2;
+    box-shadow: $box-shadow;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    text-decoration: none !important;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  .archive__item-teaser {
+    border-radius: 0;
+    overflow: hidden;
+    max-height: none;
+
+    img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 0;
+      display: block;
+    }
+  }
+
+  .archive__item-title {
+    margin-top: 0;
+    padding: 1em 1em 0.25em;
+    font-size: $type-size-5;
+    font-weight: 700;
+    text-decoration: none;
+
+    a {
+      color: $primary-color;
+      text-decoration: none;
+
+      &:hover {
+        color: $link-color;
+      }
+    }
+  }
+
+  .archive__item-excerpt {
+    display: block !important;
+    padding: 0 1em 1em;
+    font-size: $type-size-7;
+    color: $gray;
+    line-height: 1.6;
+    flex: 1;
+    margin-top: 0;
+
+    p { margin-bottom: 0; }
+  }
+
+  /* year label */
+  p:not(.archive__item-excerpt):not(.page__meta) {
+    padding: 0 1em 0.75em;
+    font-size: $type-size-8;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $info-color;
+    margin: 0;
+  }
 }
