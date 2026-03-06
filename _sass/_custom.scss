@@ -533,7 +533,7 @@ td > code {
 
     img {
       width: 100%;
-      height: 180px;
+      height: 200px;
       object-fit: cover;
       border-radius: 0;
       display: block;
@@ -566,14 +566,11 @@ td > code {
     flex: 1;
     margin-top: 0;
 
-    p {
-      margin-bottom: 0;
-      text-transform: none;
-    }
+    p { margin-bottom: 0; }
   }
 
   /* year label */
-  p:not(.archive__item-excerpt):not(.page__meta) {
+  .archive__item-year {
     padding: 0 1em 0.75em;
     font-size: $type-size-8;
     font-weight: 600;
