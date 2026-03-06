@@ -542,7 +542,7 @@ td > code {
 
   .archive__item-title {
     margin-top: 0;
-    padding: 1em 1em 0.25em;
+    padding: 0.25em 1em 0.25em;
     font-size: $type-size-5;
     font-weight: 700;
     text-decoration: none;
@@ -571,7 +571,7 @@ td > code {
 
   /* year label */
   .archive__item-year {
-    padding: 0 1em 0.75em;
+    padding: 0.9em 1em 0.2em;
     font-size: $type-size-8;
     font-weight: 600;
     letter-spacing: 0.06em;
