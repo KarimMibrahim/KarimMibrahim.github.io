@@ -67,7 +67,7 @@ redirect_from:
 <div class="cv-timeline">
 
   <div class="cv-entry">
-    <div class="cv-entry__date">May 2025 – Present</div>
+    <div class="cv-entry__date">2025 – Present</div>
     <div class="cv-entry__body">
       <div class="cv-entry__role">Senior Audio Research Scientist</div>
       <div class="cv-entry__org">Serato · Auckland, New Zealand</div>
@@ -80,7 +80,7 @@ redirect_from:
   </div>
 
   <div class="cv-entry">
-    <div class="cv-entry__date">Jun 2023 – Oct 2024</div>
+    <div class="cv-entry__date">2023 – 2024</div>
     <div class="cv-entry__body">
       <div class="cv-entry__role">Research Scientist</div>
       <div class="cv-entry__org">Emobot · Paris, France</div>
@@ -92,7 +92,7 @@ redirect_from:
   </div>
 
   <div class="cv-entry">
-    <div class="cv-entry__date">Jun 2022 – Jun 2023</div>
+    <div class="cv-entry__date">2022 – 2023</div>
     <div class="cv-entry__body">
       <div class="cv-entry__role">R&D Project Manager</div>
       <div class="cv-entry__org">Arkamys · Paris, France</div>
@@ -104,7 +104,7 @@ redirect_from:
   </div>
 
   <div class="cv-entry">
-    <div class="cv-entry__date">Oct 2018 – Jan 2022</div>
+    <div class="cv-entry__date">2018 – 2022</div>
     <div class="cv-entry__body">
       <div class="cv-entry__role">Research Scientist</div>
       <div class="cv-entry__org">Deezer Research · Paris, France</div>
@@ -128,7 +128,7 @@ redirect_from:
   </div>
 
   <div class="cv-entry">
-    <div class="cv-entry__date">Dec 2016 – Sep 2018</div>
+    <div class="cv-entry__date">2016 – 2018</div>
     <div class="cv-entry__body">
       <div class="cv-entry__role">Research Assistant</div>
       <div class="cv-entry__org">National University of Singapore · Singapore</div>
