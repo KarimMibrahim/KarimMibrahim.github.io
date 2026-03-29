@@ -21,7 +21,7 @@ redirect_from:
   </div>
 </div>
 
-I am an audio research scientist working on AI for audio and music. Currently, I am a Senior Audio Research Scientist at [Serato](https://serato.com/) in Auckland, New Zealand, where I research next-generation beat detection and low-latency stem separation for DJ and music production tools.
+I am an audio research scientist working on AI for audio and music. Currently, I am a Senior Audio Research Scientist at [Serato](https://serato.com/) in Auckland, New Zealand, where I research beat detection and low-latency stem separation for DJ and music production tools.
 
 Before Serato, I was a Research Scientist at Emobot working on speech emotion recognition, and before that I managed R&D projects at [Arkamys](https://www.arkamys.com/) in Paris, working on road noise cancellation for vehicles. Prior to that, I completed my PhD at [Télécom Paris](https://www.telecom-paristech.fr/) and [Deezer](https://www.deezer.com/en/), focused on personalised music auto-tagging and contextual music recommendation.
 
