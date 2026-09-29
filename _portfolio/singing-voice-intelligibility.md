@@ -5,7 +5,7 @@ collection: portfolio
 date: 2018-01-01
 header:
   teaser: teasers/singing-teaser.svg
-  teaser_alt: "Confusion matrix of the SVM intelligibility classifier and its accuracy per music genre"
+  teaser_alt: "Pipeline diagram: singing voice, acoustic features, SVM classifier, and High, Medium or Low intelligibility"
 ---
 
 **Duration:** 2017 – 2018  

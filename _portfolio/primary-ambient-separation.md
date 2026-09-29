@@ -5,7 +5,7 @@ collection: portfolio
 date: 2016-01-01
 header:
   teaser: teasers/pae-teaser.svg
-  teaser_alt: "Spectrograms of a stereo mix and of the primary and ambient components extracted from it with adaptive-weighting PCA"
+  teaser_alt: "Illustration of a stereo mix's left and right spectrograms separated by PCA into primary (direct sound) and ambient (diffuse reverb) spectrograms"
 ---
 
 **Duration:** 2015 – 2018  

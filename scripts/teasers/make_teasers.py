@@ -1,17 +1,11 @@
-"""Generate the project teaser figures shown on /projects/.
+"""Generate the project teaser illustrations shown on /projects/.
 
-Every figure is drawn from published results or from the algorithm the
-project describes; see the per-figure docstrings for sources.
+    python scripts/teasers/make_teasers.py    # writes images/teasers/*.svg
 
-    python scripts/teasers/make_teasers.py            # writes images/teasers/*.svg
-    python scripts/teasers/make_teasers.py --refresh-context
-
---refresh-context re-aggregates data/situation_hour_counts.csv from the
-public Deezer dataset (Zenodo record 5552288, ~108 MB download).
+Each teaser is drawn on a 440 x 220 unit canvas (1 unit = 0.01 in) so that
+layout coordinates below map directly onto the 2:1 card image.
 """
 
-import argparse
-import urllib.request
 from pathlib import Path
 
 import matplotlib
@@ -20,30 +14,44 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import font_manager
-from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.colors import LinearSegmentedColormap, to_rgb
+from matplotlib.patches import Ellipse, FancyArrowPatch, FancyBboxPatch, Rectangle
 from scipy.signal import fftconvolve, istft, stft
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "images" / "teasers"
-DATA = Path(__file__).resolve().parent / "data"
 
 # Card teasers are displayed at a 2:1 aspect ratio (see .archive__item-teaser
-# in _sass/_custom.scss). Keep the physical size small so that 8-9 pt text
-# stays legible when the card is ~350-480 px wide.
-FIG_SIZE = (4.4, 2.2)
+# in _sass/_custom.scss).
+W, H = 440, 220
 
-# Site palette (_sass/_variables.scss).
+# Site palette (_sass/_variables.scss) plus three muted accents.
 INK = "#1e293b"
 MUTED = "#64748b"
 RULE = "#cbd5e1"
-FAINT = "#e2e8f0"
 NAVY = "#1d3557"
 TEAL = "#0891b2"
-NEUTRAL = "#a3afbf"
+STEEL = "#3f6f9e"
+BRICK = "#b4583f"
+OCHRE = "#c0902f"
+VIOLET = "#6e69a3"
+SLATE = "#8c98aa"
 
 SEQ = LinearSegmentedColormap.from_list(
     "site_seq", ["#ffffff", "#cfe9f0", TEAL, NAVY], N=256
 )
+
+
+def tint(color, amount):
+    """Mix a colour with white; amount=1 gives white."""
+    r, g, b = to_rgb(color)
+    return (r + (1 - r) * amount, g + (1 - g) * amount, b + (1 - b) * amount)
+
+
+def shade(color, amount):
+    """Mix a colour with black; amount=1 gives black."""
+    r, g, b = to_rgb(color)
+    return (r * (1 - amount), g * (1 - amount), b * (1 - amount))
 
 
 def setup_style():
@@ -56,25 +64,6 @@ def setup_style():
             "font.family": family,
             "font.size": 8.5,
             "text.color": INK,
-            "axes.edgecolor": RULE,
-            "axes.labelcolor": MUTED,
-            "axes.labelsize": 8,
-            "axes.linewidth": 0.8,
-            "axes.spines.top": False,
-            "axes.spines.right": False,
-            "axes.titlesize": 9,
-            "axes.titleweight": "semibold",
-            "axes.titlelocation": "left",
-            "axes.titlepad": 6,
-            "axes.titlecolor": INK,
-            "xtick.color": MUTED,
-            "ytick.color": MUTED,
-            "xtick.labelsize": 7.5,
-            "ytick.labelsize": 7.5,
-            "xtick.major.size": 2.5,
-            "ytick.major.size": 2.5,
-            "xtick.major.width": 0.8,
-            "ytick.major.width": 0.8,
             "figure.facecolor": "white",
             "savefig.facecolor": "white",
             "svg.fonttype": "path",
@@ -82,6 +71,15 @@ def setup_style():
             "image.interpolation": "antialiased",
         }
     )
+
+
+def canvas():
+    fig = plt.figure(figsize=(W / 100, H / 100))
+    ax = fig.add_axes([0, 0, 1, 1])
+    ax.set_xlim(0, W)
+    ax.set_ylim(0, H)
+    ax.set_axis_off()
+    return fig, ax
 
 
 def save(fig, name):
@@ -92,88 +90,168 @@ def save(fig, name):
     print(f"wrote {path.relative_to(ROOT)}")
 
 
-# --------------------------------------------------------------------------
-# Contextual music recommendation
-# --------------------------------------------------------------------------
-
-ZENODO_CSV = (
-    "https://zenodo.org/api/records/5552288/files/warm_12Labels.csv/content"
-)
-
-
-def refresh_context_counts():
-    import pandas as pd
-
-    tmp = Path("/tmp/warm_12Labels.csv")
-    if not tmp.exists():
-        print(f"downloading {ZENODO_CSV}")
-        urllib.request.urlretrieve(ZENODO_CSV, tmp)
-    streams = pd.read_csv(tmp, usecols=["readable_time", "matches"])
-    counts = pd.crosstab(streams.matches, streams.readable_time)
-    counts.index.name = "situation"
-    counts.to_csv(DATA / "situation_hour_counts.csv")
-
-
-def load_context_counts():
-    raw = np.genfromtxt(
-        DATA / "situation_hour_counts.csv", delimiter=",", dtype=str
+def box(ax, x, y, w, h, fc="white", ec=RULE, lw=0.9, radius=5):
+    ax.add_patch(
+        FancyBboxPatch(
+            (x, y), w, h, boxstyle=f"round,pad=0,rounding_size={radius}",
+            fc=fc, ec=ec, lw=lw, zorder=2,
+        )
     )
-    names = list(raw[1:, 0])
-    counts = raw[1:, 1:].astype(float)
-    return names, counts
+
+
+def arrow(ax, start, end, color=MUTED):
+    ax.add_patch(
+        FancyArrowPatch(
+            start, end, arrowstyle="-|>", mutation_scale=7, color=color,
+            lw=0.9, shrinkA=0, shrinkB=0, zorder=3,
+        )
+    )
+
+
+def waveform_bars(ax, x0, x1, y, envelope, color, half_height, rng, n_bars=None):
+    """Audio-editor style waveform: one rounded vertical bar per column."""
+    n = n_bars or int((x1 - x0) / 1.9)
+    xs = np.linspace(x0, x1, n)
+    amp = envelope(np.linspace(0, 1, n)) * (0.55 + 0.45 * rng.random(n))
+    amp = np.maximum(amp, 0.03)
+    ax.vlines(xs, y - amp * half_height, y + amp * half_height, color=color,
+              lw=1.0, capstyle="round", zorder=3)
+
+
+def bumps(t, centers, widths, heights, attack=1.0):
+    """Sum of asymmetric syllable-like envelopes."""
+    env = np.zeros_like(t)
+    for c, w, h in zip(centers, widths, heights):
+        rise = np.exp(-0.5 * ((t - c) / (w * attack)) ** 2)
+        fall = np.exp(-0.5 * ((t - c) / w) ** 2)
+        env += h * np.where(t < c, rise, fall)
+    return np.minimum(env, 1.0)
+
+
+# --------------------------------------------------------------------------
+# Speech emotion recognition: the same utterance in five emotions
+# --------------------------------------------------------------------------
+
+
+def ser_teaser():
+    rng = np.random.default_rng(3)
+    fig, ax = canvas()
+
+    def syllables(n, start, end, jitter, widths, heights):
+        c = np.linspace(start, end, n) + rng.uniform(-jitter, jitter, n)
+        return c, np.full(n, widths), heights
+
+    angry = syllables(11, 0.05, 0.95, 0.015, 0.03, rng.uniform(0.8, 1.0, 11))
+    happy = syllables(9, 0.06, 0.92, 0.02, 0.035, 0.55 + 0.25 * np.sin(np.linspace(0, 3 * np.pi, 9)) ** 2)
+    sad = (np.array([0.1, 0.32, 0.54, 0.76]), np.full(4, 0.04), np.array([0.36, 0.3, 0.24, 0.16]))
+    fear_c = np.array([0.06, 0.13, 0.2, 0.42, 0.48, 0.55, 0.62, 0.84, 0.9])
+    fear = (fear_c, np.full(9, 0.028), rng.uniform(0.35, 0.7, 9))
+    neutral = syllables(8, 0.07, 0.9, 0.01, 0.04, np.full(8, 0.42))
+
+    rows = [
+        ("Angry", BRICK, lambda t: bumps(t, *angry, attack=0.5)),
+        ("Happy", OCHRE, lambda t: bumps(t, *happy)),
+        ("Sad", STEEL, lambda t: bumps(t, *sad, attack=1.3)),
+        ("Fearful", VIOLET, lambda t: bumps(t, *fear) * (0.75 + 0.25 * np.sin(2 * np.pi * 38 * t))),
+        ("Neutral", SLATE, lambda t: bumps(t, *neutral)),
+    ]
+    ys = np.linspace(186, 34, len(rows))
+    for (label, color, env), y in zip(rows, ys):
+        ax.text(20, y, label, ha="left", va="center", fontsize=9.5, fontweight="semibold", color=INK)
+        ax.hlines(y, 96, 424, color=tint(color, 0.7), lw=0.6, zorder=2)
+        waveform_bars(ax, 96, 424, y, env, color, half_height=15, rng=rng)
+    save(fig, "ser-teaser")
+
+
+# --------------------------------------------------------------------------
+# Contextual music recommendation: tracks grouped by listening context
+# --------------------------------------------------------------------------
 
 
 def context_teaser():
-    """When each listening situation is streamed, by hour of day.
+    rng = np.random.default_rng(11)
+    fig, ax = canvas()
 
-    Streams on Deezer (France and Brazil, August 2019) labelled with a
-    listening situation through playlist titles: the ISMIR 2022 dataset.
-    """
-    names, counts = load_context_counts()
-    share = counts / counts.sum(axis=1, keepdims=True) * 100
-
-    # Order rows by circular mean hour so the daily progression reads
-    # top-to-bottom, starting from the early morning.
-    angle = np.arange(24) / 24 * 2 * np.pi
-    mean_hour = (
-        np.angle((share * np.exp(1j * angle)).sum(axis=1)) / (2 * np.pi) * 24
-    ) % 24
-    order = np.argsort((mean_hour - 4) % 24)
-    share = share[order]
-    names = [names[i] for i in order]
-
-    fig = plt.figure(figsize=FIG_SIZE)
-    ax = fig.add_axes([0.14, 0.19, 0.73, 0.69])
-    cax = fig.add_axes([0.9, 0.19, 0.018, 0.69])
-
-    mesh = ax.pcolormesh(
-        np.arange(25),
-        np.arange(len(names) + 1),
-        share,
-        cmap=SEQ,
-        vmin=0,
-        vmax=11,
-        edgecolors="white",
-        linewidth=0.6,
-    )
-    ax.set_ylim(len(names), 0)
-    ax.set_yticks(np.arange(len(names)) + 0.5, [n.capitalize() for n in names])
-    ax.tick_params(axis="y", length=0, pad=4, labelsize=7.5, labelcolor=INK)
-    ax.set_xticks([0, 6, 12, 18, 24], ["00:00", "06:00", "12:00", "18:00", "24:00"])
-    ax.set_xlabel("Hour of day (local time)", labelpad=3)
-    for side in ("left", "bottom"):
-        ax.spines[side].set_visible(False)
-    ax.set_title("When each listening situation is streamed", x=-0.155)
-
-    cb = fig.colorbar(mesh, cax=cax, ticks=[0, 5, 10])
-    cb.outline.set_visible(False)
-    cb.ax.tick_params(length=0, labelsize=7, pad=2)
-    cb.ax.set_yticklabels(["0", "5", "10%"])
+    clusters = [
+        # label, colour, centre, spread (major, minor), angle, label position, alignment
+        ("Workout", BRICK, (150, 148), (30, 20), 70, (118, 150), "right"),
+        ("Party", VIOLET, (292, 150), (38, 20), 15, (344, 162), "left"),
+        ("Sleep / Relax", STEEL, (78, 84), (38, 17), 10, (80, 44), "center"),
+        ("Focus / Study", TEAL, (212, 68), (26, 20), 0, (212, 26), "center"),
+        ("Commute", OCHRE, (358, 80), (36, 18), 30, (366, 40), "center"),
+    ]
+    for label, color, (cx, cy), (a, b), angle, (lx, ly), ha in clusters:
+        n = 170
+        pts = np.clip(rng.standard_normal((n, 2)), -2.2, 2.2) * [a / 2, b / 2]
+        th = np.deg2rad(angle)
+        rot = np.array([[np.cos(th), -np.sin(th)], [np.sin(th), np.cos(th)]])
+        pts = pts @ rot.T + [cx, cy]
+        ax.add_patch(Ellipse((cx, cy), 2.3 * a, 2.3 * b, angle=angle, fc=tint(color, 0.9),
+                             ec=tint(color, 0.6), lw=0.7, zorder=2))
+        ax.scatter(pts[:, 0], pts[:, 1], s=4.5, color=color, alpha=0.85, lw=0, zorder=3)
+        ax.text(lx, ly, label, ha=ha, va="center", fontsize=9.5, fontweight="semibold",
+                color=shade(color, 0.2), zorder=4)
+    ax.set_xlim(0, W)
+    ax.set_ylim(0, H)
     save(fig, "context-teaser")
 
 
 # --------------------------------------------------------------------------
-# Primary-ambient extraction
+# Singing voice intelligibility: features -> SVM -> intelligibility class
+# --------------------------------------------------------------------------
+
+
+def singing_teaser():
+    rng = np.random.default_rng(5)
+    fig, ax = canvas()
+    mid = 110
+
+    # Input
+    box(ax, 10, 78, 80, 64)
+    t_env = lambda t: bumps(t, np.linspace(0.1, 0.9, 5), np.full(5, 0.07), [0.5, 0.9, 0.7, 1.0, 0.6])
+    waveform_bars(ax, 28, 72, 122, t_env, NAVY, half_height=9, rng=rng, n_bars=20)
+    ax.text(50, 96, "Singing voice", ha="center", va="center", fontsize=8.5, fontweight="semibold")
+
+    # Features (ISMIR 2017, Sec. 4.2)
+    arrow(ax, (90, mid), (108, mid))
+    box(ax, 108, 36, 146, 148)
+    ax.text(120, 168, "Acoustic features", ha="left", va="center", fontsize=8.5, fontweight="semibold")
+    ax.hlines(156, 120, 242, color=RULE, lw=0.7, zorder=3)
+    features = [
+        "Vocal-to-music ratio",
+        "Harmonics-to-residual",
+        "High-frequency energy",
+        "Syllable rate",
+        "MFCCs",
+    ]
+    for i, f in enumerate(features):
+        y = 141 - i * 22
+        ax.add_patch(Rectangle((120, y - 2), 4, 4, fc=TEAL, ec="none", zorder=3))
+        ax.text(131, y, f, ha="left", va="center", fontsize=7.8, color=INK)
+
+    # Classifier
+    arrow(ax, (254, mid), (270, mid))
+    box(ax, 270, 84, 64, 52, fc=tint(NAVY, 0.92), ec=tint(NAVY, 0.55))
+    ax.text(302, 116, "SVM", ha="center", va="center", fontsize=9.5, fontweight="semibold", color=NAVY)
+    ax.text(302, 100, "classifier", ha="center", va="center", fontsize=7.5, color=MUTED)
+
+    # Outputs
+    ax.text(394, 192, "Intelligibility", ha="center", va="center", fontsize=7.5, color=MUTED)
+    outputs = [("High", TEAL, 164), ("Medium", OCHRE, mid), ("Low", BRICK, 56)]
+    jx = 347
+    ax.plot([334, jx], [mid, mid], color=MUTED, lw=0.9, zorder=3)
+    ax.plot([jx, jx], [outputs[-1][2], outputs[0][2]], color=MUTED, lw=0.9, zorder=3,
+            solid_capstyle="butt")
+    for label, color, y in outputs:
+        arrow(ax, (jx, y), (360, y))
+        box(ax, 360, y - 15, 68, 30, fc=tint(color, 0.85), ec=tint(color, 0.35), radius=15)
+        ax.text(394, y, label, ha="center", va="center", fontsize=8.5, fontweight="semibold",
+                color=shade(color, 0.35))
+    save(fig, "singing-teaser")
+
+
+# --------------------------------------------------------------------------
+# Primary-ambient extraction: stereo mix -> primary + ambient
 # --------------------------------------------------------------------------
 
 FS = 16000
@@ -191,8 +269,7 @@ def _pluck(freq, dur, rng):
 
 def _synthetic_stereo(rng):
     """Short dry notes, amplitude-panned, plus a decorrelated reverb."""
-    dur = 4.0
-    dry = np.zeros(int(dur * FS))
+    dry = np.zeros(int(4.0 * FS))
     melody = [
         (0.15, 196.0), (0.50, 246.9), (0.85, 293.7), (1.20, 392.0),
         (1.90, 329.6), (2.25, 293.7), (2.60, 246.9), (2.95, 220.0),
@@ -204,23 +281,18 @@ def _synthetic_stereo(rng):
         dry[i:i + n] += note[:n]
     dry /= np.abs(dry).max()
 
-    # Primary: the same dry signal in both channels, panned right of centre.
     primary = np.stack([0.55 * dry, 0.85 * dry])
 
-    # Ambient: independent exponentially decaying noise per channel makes the
-    # left/right reverb mutually uncorrelated, as assumed by PCA-based PAE.
+    # Independent decaying noise per channel makes the left/right reverb
+    # mutually uncorrelated, as assumed by PCA-based extraction.
     rt60 = 2.0
     t_ir = np.arange(int(rt60 * FS)) / FS
-    envelope = np.exp(-6.9 * t_ir / rt60) * np.minimum(1, t_ir / 0.03)
-    envelope *= np.exp(-t_ir * 1.5)
+    envelope = np.exp(-6.9 * t_ir / rt60) * np.minimum(1, t_ir / 0.03) * np.exp(-t_ir * 1.5)
     ambient = np.stack(
-        [
-            fftconvolve(dry, rng.standard_normal(len(t_ir)) * envelope)[: len(dry)]
-            for _ in range(2)
-        ]
+        [fftconvolve(dry, rng.standard_normal(len(t_ir)) * envelope)[: len(dry)] for _ in range(2)]
     )
     ambient *= AMBIENT_LEVEL * np.abs(primary).max() / np.abs(ambient).max()
-    return primary, ambient
+    return primary + ambient
 
 
 def pca_pae(stereo, nperseg=1024, hop=256, context=4, threshold=0.9):
@@ -250,199 +322,54 @@ def pca_pae(stereo, nperseg=1024, hop=256, context=4, threshold=0.9):
     return p[:, : stereo.shape[1]], a[:, : stereo.shape[1]]
 
 
-def _spec_db(x, nperseg=256, hop=64):
-    f, t, Z = stft(x, FS, nperseg=nperseg, noverlap=nperseg - hop)
-    return f, t, 20 * np.log10(np.abs(Z) + 1e-6)
+def _spec_db(x, nperseg=256, hop=64, fmax=3500):
+    f, _, Z = stft(x, FS, nperseg=nperseg, noverlap=nperseg - hop)
+    return 20 * np.log10(np.abs(Z[f <= fmax]) + 1e-6)
 
 
 def pae_teaser():
-    """Stereo mix, PCA primary estimate and PCA ambient estimate.
-
-    Illustrative: runs the PCA extraction on a synthetic stereo recording
-    (no audio from the original studies is in the repository).
-    """
     rng = np.random.default_rng(7)
-    mix = sum(_synthetic_stereo(rng))
+    mix = _synthetic_stereo(rng)
     primary, ambient = pca_pae(mix)
+    specs = {
+        "L": _spec_db(mix[0]), "R": _spec_db(mix[1]),
+        "primary": _spec_db(primary[0]), "ambient": _spec_db(ambient[0]),
+    }
+    ref = max(s.max() for s in specs.values())
 
-    rows = [
-        ("Stereo mix", "input", mix[0]),
-        ("Primary", "direct sound", primary[0]),
-        ("Ambient", "diffuse reverb", ambient[0]),
-    ]
-    specs = [_spec_db(x) for _, _, x in rows]
-    ref = max(s[2].max() for s in specs)
-    fmax = 3500
+    fig, ax = canvas()
 
-    fig, axes = plt.subplots(
-        3, 1, figsize=FIG_SIZE, sharex=True,
-        gridspec_kw={"left": 0.2, "right": 0.91, "top": 0.97, "bottom": 0.165, "hspace": 0.14},
-    )
-    for ax, (label, sub, _), (f, t, S) in zip(axes, rows, specs):
-        keep = f <= fmax
-        ax.imshow(
-            np.clip(S[keep] - ref, -45, 0),
-            origin="lower", aspect="auto", cmap=SEQ, vmin=-45, vmax=0,
-            extent=[t[0], t[-1], 0, fmax / 1000],
-        )
-        ax.text(-0.025, 0.62, label, transform=ax.transAxes, ha="right", va="center",
-                fontsize=8.5, fontweight="semibold", color=INK)
-        ax.text(-0.025, 0.3, sub, transform=ax.transAxes, ha="right", va="center",
-                fontsize=7, color=MUTED)
-        ax.yaxis.tick_right()
-        ax.set_yticks([1, 3], ["1", "3 kHz"])
-        ax.tick_params(axis="y", labelsize=6.5, pad=2, length=0)
-        ax.tick_params(axis="x", length=0)
-        for side in ("left", "bottom"):
-            ax.spines[side].set_visible(False)
-    axes[-1].set_xlabel("Time (s)", labelpad=3)
-    axes[-1].set_xlim(0, 4)
+    def panel(key, x, y, w, h):
+        ax.imshow(np.clip(specs[key] - ref, -45, 0), origin="lower", aspect="auto",
+                  cmap=SEQ, vmin=-45, vmax=0, extent=[x, x + w, y, y + h], zorder=2)
+        ax.add_patch(Rectangle((x, y), w, h, fc="none", ec=RULE, lw=0.8, zorder=3))
+
+    def heading(x, y, title, sub):
+        ax.text(x, y, title, ha="left", va="baseline", fontsize=9.5, fontweight="semibold")
+        ax.text(x, y - 13, sub, ha="left", va="baseline", fontsize=7.5, color=MUTED)
+
+    heading(12, 196, "Stereo mix", "left and right channels")
+    ax.text(12, 142, "L", ha="left", va="center", fontsize=8, fontweight="semibold", color=MUTED)
+    ax.text(12, 70, "R", ha="left", va="center", fontsize=8, fontweight="semibold", color=MUTED)
+    panel("L", 26, 112, 160, 60)
+    panel("R", 26, 40, 160, 60)
+
+    arrow(ax, (196, 106), (234, 106), color=NAVY)
+    ax.text(215, 115, "PCA", ha="center", va="baseline", fontsize=7.5, fontweight="semibold", color=NAVY)
+
+    heading(246, 196, "Primary", "direct sound")
+    panel("primary", 246, 124, 182, 44)
+    heading(246, 98, "Ambient", "diffuse reverb")
+    panel("ambient", 246, 26, 182, 44)
     save(fig, "pae-teaser")
 
 
-# --------------------------------------------------------------------------
-# Singing voice intelligibility
-# --------------------------------------------------------------------------
-
-# ISMIR 2017, Fig. 2: leave-one-out SVM confusion matrix on 100 excerpts.
-# Rows are listener-rated classes (43 / 42 / 15 excerpts), columns predictions.
-IOSL_CONFUSION = np.array([[33, 9, 1], [10, 30, 2], [4, 8, 3]])
-# ISMIR 2017, Table 1: classification accuracy per genre.
-IOSL_GENRE_ACC = {"Classical": 70, "Pop/Rock": 60, "Jazz": 60, "Folk": 55, "R&B": 55}
-IOSL_OVERALL_ACC = 66
-
-
-def singing_teaser():
-    """Predicting lyric intelligibility from acoustic features (ISMIR 2017)."""
-    fig = plt.figure(figsize=FIG_SIZE)
-    ax_cm = fig.add_axes([0.205, 0.2, 0.3, 0.64])
-    ax_g = fig.add_axes([0.695, 0.2, 0.275, 0.64])
-    title_y = 0.92
-
-    classes = ["High", "Moderate", "Low"]
-    cm = IOSL_CONFUSION
-    rate = cm / cm.sum(axis=1, keepdims=True)
-    ax_cm.pcolormesh(
-        np.arange(4), np.arange(4), rate, cmap=SEQ, vmin=0, vmax=1,
-        edgecolors="white", linewidth=1.5,
-    )
-    for i in range(3):
-        for j in range(3):
-            ax_cm.text(
-                j + 0.5, i + 0.5, str(cm[i, j]), ha="center", va="center",
-                fontsize=8.5, fontweight="semibold" if i == j else "normal",
-                color="white" if rate[i, j] > 0.5 else INK,
-            )
-    ax_cm.set_xlim(0, 3)
-    ax_cm.set_ylim(3, 0)
-    ax_cm.set_xticks(np.arange(3) + 0.5, classes)
-    ax_cm.set_yticks(np.arange(3) + 0.5, classes)
-    ax_cm.tick_params(length=0, labelcolor=INK, pad=3)
-    ax_cm.set_xlabel("Predicted", labelpad=4)
-    ax_cm.set_ylabel("Listener-rated", labelpad=4)
-    for side in ("left", "bottom"):
-        ax_cm.spines[side].set_visible(False)
-    fig.text(0.025, title_y, "Predicted intelligibility (n = 100)",
-             fontsize=9, fontweight="semibold", color=INK)
-
-    genres = list(IOSL_GENRE_ACC)
-    acc = [IOSL_GENRE_ACC[g] for g in genres]
-    y = np.arange(len(genres))
-    ax_g.barh(y, acc, height=0.58, color=TEAL, zorder=2)
-    ax_g.axvline(IOSL_OVERALL_ACC, color=NAVY, lw=1, ls=(0, (3, 2)), zorder=3)
-    ax_g.text(
-        IOSL_OVERALL_ACC + 2, -0.62, f"all {IOSL_OVERALL_ACC}%",
-        fontsize=7, color=NAVY, va="center", ha="left",
-    )
-    for yi, a in zip(y, acc):
-        ax_g.text(a - 2, yi, f"{a}%", va="center", ha="right", fontsize=7, color="white", zorder=4)
-    ax_g.set_yticks(y, genres)
-    ax_g.set_ylim(len(genres) - 0.45, -0.9)
-    ax_g.set_xlim(0, 100)
-    ax_g.set_xticks([0, 50, 100], ["0", "50", "100%"])
-    ax_g.tick_params(axis="y", length=0, labelcolor=INK, pad=3)
-    ax_g.spines["left"].set_visible(False)
-    ax_g.grid(axis="x", color=FAINT, lw=0.8, zorder=0)
-    ax_g.set_xlabel("Accuracy", labelpad=3)
-    fig.text(0.575, title_y, "Accuracy by genre", fontsize=9, fontweight="semibold", color=INK)
-    save(fig, "singing-teaser")
-
-
-# --------------------------------------------------------------------------
-# Speech emotion recognition
-# --------------------------------------------------------------------------
-
-# ICASSP 2024, Table 2: accuracy (%) with 95% CI over 5-fold cross-validation
-# of wav2vec 2.0. SD / SI = speaker dependent / speaker independent splits.
-ORIG, AUG, CONV = "Original data", "+ Audio augmentation", "+ Emotion conversion"
-SER_RESULTS = {
-    ("IEMOCAP", "seen speakers"): {ORIG: (74.16, 2.00), AUG: (74.17, 1.37), CONV: (76.19, 1.95)},
-    ("IEMOCAP", "new speakers"): {ORIG: (63.97, 2.93), AUG: (65.32, 3.44), CONV: (66.06, 2.21)},
-    ("RAVDESS", "seen speakers"): {ORIG: (91.08, 2.93), AUG: (92.71, 2.20), CONV: (93.05, 2.12)},
-    ("RAVDESS", "new speakers"): {ORIG: (81.01, 3.19), AUG: (82.29, 2.96), CONV: (81.29, 2.77)},
-}
-
-
-def ser_teaser():
-    """wav2vec 2.0 accuracy with and without emotion-conversion augmentation."""
-    fig = plt.figure(figsize=FIG_SIZE)
-    ax = fig.add_axes([0.25, 0.22, 0.72, 0.64])
-
-    setups = [ORIG, AUG, CONV]
-    style = {
-        ORIG: dict(color=NEUTRAL, marker="o", ms=4.5, mfc="white", mew=1.2),
-        AUG: dict(color=NEUTRAL, marker="s", ms=4, mew=0),
-        CONV: dict(color=NAVY, marker="D", ms=4.5, mew=0),
-    }
-    offsets = {ORIG: -0.2, AUG: 0.0, CONV: 0.2}
-
-    groups = list(SER_RESULTS)
-    for gi, g in enumerate(groups):
-        dataset = g[0]
-        if gi % 2 == 0:
-            ax.axhspan(gi - 0.5, gi + 1.5, color="#f5f7fa", zorder=0, lw=0)
-            ax.text(-0.235, 1 - (gi + 1) / len(groups), dataset, transform=ax.transAxes,
-                    ha="left", va="center", fontsize=8.5, fontweight="semibold", color=INK)
-        for s in setups:
-            mean, ci = SER_RESULTS[g][s]
-            st = style[s]
-            ax.errorbar(
-                mean, gi + offsets[s], xerr=ci, fmt=st["marker"], color=st["color"],
-                ms=st["ms"], mfc=st.get("mfc", st["color"]), mec=st["color"],
-                mew=st["mew"] or 0, elinewidth=1, capsize=0, zorder=3,
-                label=s if gi == 0 else None,
-            )
-    ax.set_yticks(np.arange(len(groups)), [split for _, split in groups])
-    ax.set_ylim(len(groups) - 0.5, -0.5)
-    ax.set_xlim(58, 97)
-    ax.set_xticks([60, 70, 80, 90], ["60", "70", "80", "90%"])
-    ax.tick_params(axis="y", length=0, labelcolor=MUTED, labelsize=7, pad=4)
-    ax.spines["left"].set_visible(False)
-    ax.grid(axis="x", color=FAINT, lw=0.8, zorder=1)
-    ax.set_axisbelow(True)
-    ax.set_xlabel("Emotion recognition accuracy (mean, 95% CI)", labelpad=3)
-    leg = ax.legend(
-        loc="lower left", bbox_to_anchor=(-0.235, 1.03), ncol=3, frameon=False,
-        fontsize=7.5, handletextpad=0.3, columnspacing=1.0, borderaxespad=0,
-    )
-    for text in leg.get_texts():
-        if text.get_text() == CONV:
-            text.set_color(NAVY)
-            text.set_fontweight("semibold")
-    save(fig, "ser-teaser")
-
-
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--refresh-context", action="store_true")
-    args = parser.parse_args()
-    if args.refresh_context:
-        refresh_context_counts()
     setup_style()
-    context_teaser()
-    pae_teaser()
-    singing_teaser()
     ser_teaser()
+    context_teaser()
+    singing_teaser()
+    pae_teaser()
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ collection: portfolio
 date: 2022-01-01
 header:
   teaser: teasers/context-teaser.svg
-  teaser_alt: "Heatmap of the share of Deezer streams per hour of day for twelve listening situations, from running and work in the morning to night and sleep after midnight"
+  teaser_alt: "Illustration of music tracks grouped into listening-context clusters: Workout, Party, Sleep / Relax, Focus / Study and Commute"
 ---
 
 **Duration:** 2018 – 2022  

@@ -5,7 +5,7 @@ collection: portfolio
 date: 2024-01-01
 header:
   teaser: teasers/ser-teaser.svg
-  teaser_alt: "Speech emotion recognition accuracy on IEMOCAP and RAVDESS when training on original data, with audio augmentation, or with emotion-converted synthetic speech"
+  teaser_alt: "Illustrative speech waveforms for angry, happy, sad, fearful and neutral delivery"
 ---
 
 **Duration:** 2023 – 2024  
