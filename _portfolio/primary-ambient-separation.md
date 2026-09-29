@@ -5,7 +5,7 @@ collection: portfolio
 date: 2016-01-01
 header:
   teaser: teasers/pae-teaser.svg
-  teaser_alt: "Illustration of a stereo mix's left and right spectrograms separated by PCA into primary (direct sound) and ambient (diffuse reverb) spectrograms"
+  teaser_alt: "Top-down concert hall where a singer's direct sound and its wall reflections reach a listener, then shown separated into a primary (direct sound) layer and an ambient (reflections) layer"
 ---
 
 **Duration:** 2015 – 2018  

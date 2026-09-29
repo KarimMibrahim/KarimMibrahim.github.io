@@ -5,7 +5,7 @@ collection: portfolio
 date: 2018-01-01
 header:
   teaser: teasers/singing-teaser.svg
-  teaser_alt: "Pipeline diagram: singing voice, acoustic features, SVM classifier, and High, Medium or Low intelligibility"
+  teaser_alt: "A singer sends the same lyric line three times: crisp next to High intelligibility, smudged next to Medium, and dissolving into music notes next to Low"
 ---
 
 **Duration:** 2017 – 2018  

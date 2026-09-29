@@ -14,9 +14,10 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import font_manager
-from matplotlib.colors import LinearSegmentedColormap, to_rgb
-from matplotlib.patches import Ellipse, FancyArrowPatch, FancyBboxPatch, Rectangle
-from scipy.signal import fftconvolve, istft, stft
+from matplotlib.colors import to_rgb
+from matplotlib.font_manager import FontProperties
+from matplotlib.patches import Circle, Ellipse, FancyArrowPatch, FancyBboxPatch, Polygon, Rectangle
+from matplotlib.textpath import TextPath
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "images" / "teasers"
@@ -36,11 +37,7 @@ BRICK = "#b4583f"
 OCHRE = "#c0902f"
 VIOLET = "#6e69a3"
 SLATE = "#8c98aa"
-
-SEQ = LinearSegmentedColormap.from_list(
-    "site_seq", ["#ffffff", "#cfe9f0", TEAL, NAVY], N=256
-)
-
+FLOOR = "#f6f8fb"
 
 def tint(color, amount):
     """Mix a colour with white; amount=1 gives white."""
@@ -197,170 +194,161 @@ def context_teaser():
 
 
 # --------------------------------------------------------------------------
-# Singing voice intelligibility: features -> SVM -> intelligibility class
+# Singing voice intelligibility: one lyric line at three intelligibility levels
 # --------------------------------------------------------------------------
+
+LYRIC = "every word you sing"
+GLYPHS = "DejaVu Sans"  # Inter has no music-note glyphs
+
+
+def text_width(s, size, weight="normal"):
+    """Advance width of a string in canvas units (1 unit = 0.72 pt)."""
+    if not s:
+        return 0.0
+    prop = FontProperties(family="Inter", weight=weight)
+    probe = TextPath((0, 0), s + "|", size=size, prop=prop).get_extents().x1
+    bar = TextPath((0, 0), "|", size=size, prop=prop).get_extents().x1
+    return (probe - bar) / 0.72
+
+
+def pill(ax, x, y, label, color, w=62, h=24, size=8.5):
+    box(ax, x - w / 2, y - h / 2, w, h, fc=tint(color, 0.85), ec=tint(color, 0.35), radius=h / 2)
+    ax.text(x, y, label, ha="center", va="center", fontsize=size, fontweight="semibold",
+            color=shade(color, 0.35), zorder=4)
+
+
+def singer_side(ax, x, y, color=NAVY, s=1.0):
+    """Standing singer facing right holding a microphone; (x, y) = feet centre."""
+    ax.add_patch(FancyBboxPatch((x - 14 * s, y), 28 * s, 52 * s,
+                                boxstyle=f"round,pad=0,rounding_size={11 * s}", fc=color, ec="none", zorder=3))
+    ax.add_patch(Circle((x + 1 * s, y + 66 * s), 11 * s, fc=color, ec="none", zorder=3))
+    ax.plot([x + 8 * s, x + 19 * s], [y + 36 * s, y + 55 * s], color=color, lw=4 * s,
+            solid_capstyle="round", zorder=3)
+    ax.plot([x + 19 * s, x + 23 * s], [y + 55 * s, y + 62 * s], color=INK, lw=2.4 * s,
+            solid_capstyle="round", zorder=4)
+    ax.add_patch(Circle((x + 24.5 * s, y + 64.5 * s), 3.6 * s, fc=INK, ec="none", zorder=4))
+    return (x + 30 * s, y + 66 * s)
 
 
 def singing_teaser():
-    rng = np.random.default_rng(5)
+    rng = np.random.default_rng(1)
     fig, ax = canvas()
-    mid = 110
+    mouth = singer_side(ax, 42, 44, s=1.05)
+    ax.add_patch(Rectangle((14, 40), 76, 4, fc=RULE, ec="none", zorder=2))
 
-    # Input
-    box(ax, 10, 78, 80, 64)
-    t_env = lambda t: bumps(t, np.linspace(0.1, 0.9, 5), np.full(5, 0.07), [0.5, 0.9, 0.7, 1.0, 0.6])
-    waveform_bars(ax, 28, 72, 122, t_env, NAVY, half_height=9, rng=rng, n_bars=20)
-    ax.text(50, 96, "Singing voice", ha="center", va="center", fontsize=8.5, fontweight="semibold")
+    x0, size = 118, 12
+    rows = [(164, "High", TEAL), (110, "Medium", OCHRE), (56, "Low", BRICK)]
+    for y, label, color in rows:
+        ax.add_patch(FancyArrowPatch(mouth, (x0 - 8, y), arrowstyle="-", color=RULE, lw=0.9,
+                                     ls=(0, (2, 2)), zorder=2))
+        pill(ax, 400, y, label, color)
 
-    # Features (ISMIR 2017, Sec. 4.2)
-    arrow(ax, (90, mid), (108, mid))
-    box(ax, 108, 36, 146, 148)
-    ax.text(120, 168, "Acoustic features", ha="left", va="center", fontsize=8.5, fontweight="semibold")
-    ax.hlines(156, 120, 242, color=RULE, lw=0.7, zorder=3)
-    features = [
-        "Vocal-to-music ratio",
-        "Harmonics-to-residual",
-        "High-frequency energy",
-        "Syllable rate",
-        "MFCCs",
-    ]
-    for i, f in enumerate(features):
-        y = 141 - i * 22
-        ax.add_patch(Rectangle((120, y - 2), 4, 4, fc=TEAL, ec="none", zorder=3))
-        ax.text(131, y, f, ha="left", va="center", fontsize=7.8, color=INK)
+    # High: crisp.
+    ax.text(x0, 164, LYRIC, fontsize=size, fontweight="semibold", color=INK, va="center")
 
-    # Classifier
-    arrow(ax, (254, mid), (270, mid))
-    box(ax, 270, 84, 64, 52, fc=tint(NAVY, 0.92), ec=tint(NAVY, 0.55))
-    ax.text(302, 116, "SVM", ha="center", va="center", fontsize=9.5, fontweight="semibold", color=NAVY)
-    ax.text(302, 100, "classifier", ha="center", va="center", fontsize=7.5, color=MUTED)
+    # Medium: a faint offset copy behind the line reads as smudged.
+    ax.text(x0 + 1.4, 110 - 1.2, LYRIC, fontsize=size, fontweight="semibold", color=tint(INK, 0.72),
+            va="center", zorder=3)
+    ax.text(x0, 110, LYRIC, fontsize=size, fontweight="semibold", color=tint(INK, 0.3), va="center", zorder=4)
 
-    # Outputs
-    ax.text(394, 192, "Intelligibility", ha="center", va="center", fontsize=7.5, color=MUTED)
-    outputs = [("High", TEAL, 164), ("Medium", OCHRE, mid), ("Low", BRICK, 56)]
-    jx = 347
-    ax.plot([334, jx], [mid, mid], color=MUTED, lw=0.9, zorder=3)
-    ax.plot([jx, jx], [outputs[-1][2], outputs[0][2]], color=MUTED, lw=0.9, zorder=3,
-            solid_capstyle="butt")
-    for label, color, y in outputs:
-        arrow(ax, (jx, y), (360, y))
-        box(ax, 360, y - 15, 68, 30, fc=tint(color, 0.85), ec=tint(color, 0.35), radius=15)
-        ax.text(394, y, label, ha="center", va="center", fontsize=8.5, fontweight="semibold",
-                color=shade(color, 0.35))
+    # Low: letters drift and fade, then turn into music notes.
+    n = len(LYRIC)
+    for i, ch in enumerate(LYRIC):
+        k = i / (n - 1)
+        x = x0 + text_width(LYRIC[:i], size, "semibold")
+        if ch == " ":
+            continue
+        if k < 0.62:
+            ax.text(x, 56 + rng.uniform(-3, 3) * k * 2, ch, fontsize=size, fontweight="semibold",
+                    va="center", color=tint(INK, 0.35 + 0.5 * k), rotation=rng.uniform(-25, 25) * k,
+                    zorder=3)
+        else:
+            glyph = "♪" if rng.random() < 0.6 else "♫"
+            ax.text(x + 2, 58 + (k - 0.6) * 28 + rng.uniform(-4, 4), glyph, fontsize=10 + 3 * rng.random(),
+                    color=tint(BRICK, 0.1 + 0.5 * (k - 0.6)), rotation=rng.uniform(-20, 20),
+                    ha="center", va="center", fontfamily=GLYPHS, zorder=4)
     save(fig, "singing-teaser")
 
 
 # --------------------------------------------------------------------------
-# Primary-ambient extraction: stereo mix -> primary + ambient
+# Primary-ambient extraction: direct sound and hall reflections pulled apart
 # --------------------------------------------------------------------------
 
-FS = 16000
-AMBIENT_LEVEL = 0.3
+
+def person_top(ax, x, y, facing=90, color=NAVY, s=1.0):
+    """Person seen from above; facing is the direction of the nose in degrees."""
+    th = np.deg2rad(facing)
+    fwd = np.array([np.cos(th), np.sin(th)])
+    ax.add_patch(Ellipse((x, y) - fwd * 1.5 * s, 28 * s, 12 * s, angle=facing - 90,
+                         fc=tint(color, 0.6), ec="none", zorder=4))
+    tip = fwd * 9.5 * s + [x, y]
+    side = np.array([-fwd[1], fwd[0]]) * 2.4 * s
+    base = fwd * 5 * s + [x, y]
+    ax.add_patch(Polygon([tip, base + side, base - side], fc=color, ec="none", zorder=5))
+    ax.add_patch(Circle((x, y), 6 * s, fc=color, ec="none", zorder=5))
 
 
-def _pluck(freq, dur, rng):
-    t = np.arange(int(dur * FS)) / FS
-    note = np.zeros_like(t)
-    for k in range(1, 9):
-        decay = np.exp(-t * (12 + 3 * k))
-        note += decay * np.sin(2 * np.pi * k * freq * t + rng.uniform(0, 2 * np.pi)) / k**0.7
-    return note * np.minimum(1, t / 0.003)
+def _mirror(p, wall, value):
+    return (p[0], 2 * value - p[1]) if wall == "y" else (2 * value - p[0], p[1])
 
 
-def _synthetic_stereo(rng):
-    """Short dry notes, amplitude-panned, plus a decorrelated reverb."""
-    dry = np.zeros(int(4.0 * FS))
-    melody = [
-        (0.15, 196.0), (0.50, 246.9), (0.85, 293.7), (1.20, 392.0),
-        (1.90, 329.6), (2.25, 293.7), (2.60, 246.9), (2.95, 220.0),
-    ]
-    for onset, f0 in melody:
-        note = _pluck(f0, 0.5, rng)
-        i = int(onset * FS)
-        n = min(len(note), len(dry) - i)
-        dry[i:i + n] += note[:n]
-    dry /= np.abs(dry).max()
-
-    primary = np.stack([0.55 * dry, 0.85 * dry])
-
-    # Independent decaying noise per channel makes the left/right reverb
-    # mutually uncorrelated, as assumed by PCA-based extraction.
-    rt60 = 2.0
-    t_ir = np.arange(int(rt60 * FS)) / FS
-    envelope = np.exp(-6.9 * t_ir / rt60) * np.minimum(1, t_ir / 0.03) * np.exp(-t_ir * 1.5)
-    ambient = np.stack(
-        [fftconvolve(dry, rng.standard_normal(len(t_ir)) * envelope)[: len(dry)] for _ in range(2)]
-    )
-    ambient *= AMBIENT_LEVEL * np.abs(primary).max() / np.abs(ambient).max()
-    return primary + ambient
+def _hit(a, b, wall, value):
+    i = 1 if wall == "y" else 0
+    t = (value - a[i]) / (b[i] - a[i])
+    return (a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1]))
 
 
-def pca_pae(stereo, nperseg=1024, hop=256, context=4, threshold=0.9):
-    """Adaptive-weighting PCA primary-ambient extraction (SMC 2016).
-
-    Per STFT bin, the 2x2 inter-channel covariance is estimated over
-    2 * context + 1 adjacent frames. The primary estimate is the projection
-    onto the dominant eigenvector, scaled by w = 1 - lambda2 / lambda1 and
-    zeroed where w < threshold; the ambient estimate is the residual.
-    """
-    _, _, X = stft(stereo, FS, nperseg=nperseg, noverlap=nperseg - hop)
-    x = np.moveaxis(X, 0, -1)  # bins, frames, channels
-    outer = np.einsum("bfi,bfj->bfij", x, x.conj())
-    padded = np.pad(outer, ((0, 0), (context, context), (0, 0), (0, 0)))
-    csum = np.cumsum(padded, axis=1)
-    csum = np.concatenate([np.zeros_like(csum[:, :1]), csum], axis=1)
-    cov = csum[:, 2 * context + 1:] - csum[:, : -(2 * context + 1)]
-    vals, vecs = np.linalg.eigh(cov + 1e-12 * np.eye(2))
-    v = vecs[..., -1]
-    w = 1 - vals[..., 0] / np.maximum(vals[..., 1], 1e-12)
-    w = np.where(w > threshold, w, 0.0)
-    proj = np.einsum("bfi,bfi->bf", v.conj(), x)
-    P = np.moveaxis(v * (w * proj)[..., None], -1, 0)
-    A = X - P
-    _, p = istft(P, FS, nperseg=nperseg, noverlap=nperseg - hop)
-    _, a = istft(A, FS, nperseg=nperseg, noverlap=nperseg - hop)
-    return p[:, : stereo.shape[1]], a[:, : stereo.shape[1]]
+def reflection_paths(src, dst, x0, y0, x1, y1):
+    """Image-source paths off each side wall, and side wall then back wall."""
+    paths = []
+    for wall in (("y", y1), ("y", y0)):
+        img = _mirror(src, *wall)
+        paths.append([src, _hit(dst, img, *wall), dst])
+        img2 = _mirror(img, "x", x1)
+        p2 = _hit(dst, img2, "x", x1)
+        paths.append([src, _hit(p2, img, *wall), p2, dst])
+    return paths
 
 
-def _spec_db(x, nperseg=256, hop=64, fmax=3500):
-    f, _, Z = stft(x, FS, nperseg=nperseg, noverlap=nperseg - hop)
-    return 20 * np.log10(np.abs(Z[f <= fmax]) + 1e-6)
+def dashed_path(ax, pts, color, lw=1.0):
+    pts = np.asarray(pts, float)
+    ax.plot(pts[:, 0], pts[:, 1], color=color, lw=lw, ls=(0, (3, 2.2)), zorder=3)
+    ax.add_patch(FancyArrowPatch(tuple(pts[-2] + (pts[-1] - pts[-2]) * 0.8), tuple(pts[-1]),
+                                 arrowstyle="-|>", mutation_scale=6, color=color, lw=0,
+                                 shrinkA=0, shrinkB=0, zorder=3))
+
+
+def hall(ax, x0, y0, x1, y1, singer, listener, direct=True, ambient=True, s=1.0):
+    ax.add_patch(Rectangle((x0, y0), x1 - x0, y1 - y0, fc=FLOOR, ec=SLATE, lw=1.3, zorder=1))
+    ax.add_patch(Rectangle((x0, y0), (x1 - x0) * 0.2, y1 - y0, fc=tint(OCHRE, 0.86), ec="none", zorder=1.5))
+    if ambient:
+        for path in reflection_paths(singer, listener, x0, y0, x1, y1):
+            dashed_path(ax, path, TEAL, lw=1.0 * s)
+    if direct:
+        ax.add_patch(FancyArrowPatch((singer[0] + 11 * s, singer[1]), (listener[0] - 12 * s, listener[1]),
+                                     arrowstyle="-|>", mutation_scale=10 * s, color=NAVY, lw=2.4 * s,
+                                     shrinkA=0, shrinkB=0, zorder=4))
+    person_top(ax, *singer, facing=0, color=NAVY, s=s)
+    person_top(ax, *listener, facing=180, color=INK, s=s)
+
+
+def heading(ax, x, y, title, sub, color=INK, size=9):
+    ax.text(x, y, title, fontsize=size, fontweight="semibold", va="center", color=color)
+    ax.text(x + text_width(title, size, "semibold") + 5, y, sub, fontsize=7.5, va="center", color=MUTED)
 
 
 def pae_teaser():
-    rng = np.random.default_rng(7)
-    mix = _synthetic_stereo(rng)
-    primary, ambient = pca_pae(mix)
-    specs = {
-        "L": _spec_db(mix[0]), "R": _spec_db(mix[1]),
-        "primary": _spec_db(primary[0]), "ambient": _spec_db(ambient[0]),
-    }
-    ref = max(s.max() for s in specs.values())
-
     fig, ax = canvas()
+    heading(ax, 14, 204, "In the hall", "voice and room arrive together")
+    hall(ax, 14, 22, 222, 190, (44, 106), (184, 100))
 
-    def panel(key, x, y, w, h):
-        ax.imshow(np.clip(specs[key] - ref, -45, 0), origin="lower", aspect="auto",
-                  cmap=SEQ, vmin=-45, vmax=0, extent=[x, x + w, y, y + h], zorder=2)
-        ax.add_patch(Rectangle((x, y), w, h, fc="none", ec=RULE, lw=0.8, zorder=3))
+    arrow(ax, (230, 146), (254, 160), color=NAVY)
+    arrow(ax, (230, 66), (254, 52), color=shade(TEAL, 0.1))
 
-    def heading(x, y, title, sub):
-        ax.text(x, y, title, ha="left", va="baseline", fontsize=9.5, fontweight="semibold")
-        ax.text(x, y - 13, sub, ha="left", va="baseline", fontsize=7.5, color=MUTED)
-
-    heading(12, 196, "Stereo mix", "left and right channels")
-    ax.text(12, 142, "L", ha="left", va="center", fontsize=8, fontweight="semibold", color=MUTED)
-    ax.text(12, 70, "R", ha="left", va="center", fontsize=8, fontweight="semibold", color=MUTED)
-    panel("L", 26, 112, 160, 60)
-    panel("R", 26, 40, 160, 60)
-
-    arrow(ax, (196, 106), (234, 106), color=NAVY)
-    ax.text(215, 115, "PCA", ha="center", va="baseline", fontsize=7.5, fontweight="semibold", color=NAVY)
-
-    heading(246, 196, "Primary", "direct sound")
-    panel("primary", 246, 124, 182, 44)
-    heading(246, 98, "Ambient", "diffuse reverb")
-    panel("ambient", 246, 26, 182, 44)
+    heading(ax, 262, 204, "Primary", "direct sound", color=NAVY)
+    hall(ax, 262, 122, 428, 192, (284, 157), (398, 155), ambient=False, s=0.7)
+    heading(ax, 262, 106, "Ambient", "reflections", color=shade(TEAL, 0.2))
+    hall(ax, 262, 22, 428, 92, (284, 57), (398, 55), direct=False, s=0.7)
     save(fig, "pae-teaser")
 
 
