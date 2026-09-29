@@ -4,7 +4,8 @@ excerpt: "My PhD project at Télécom Paris and Deezer, studying how listening c
 collection: portfolio
 date: 2022-01-01
 header:
-  teaser: teasers/context-teaser.jpg
+  teaser: teasers/context-teaser.svg
+  teaser_alt: "Illustration of music tracks grouped into listening-context clusters: Workout, Party, Sleep / Relax, Focus / Study and Commute"
 ---
 
 **Duration:** 2018 – 2022  

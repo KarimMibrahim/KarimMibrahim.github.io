@@ -22,7 +22,7 @@
           {% else %}
             "{{ teaser | prepend: "/images/" | prepend: base_path }}"
           {% endif %}
-          alt="">
+          alt="{{ post.header.teaser_alt }}">
       </div>
     {% endif %}
 

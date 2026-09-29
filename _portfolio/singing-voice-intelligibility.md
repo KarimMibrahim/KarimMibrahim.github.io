@@ -4,7 +4,8 @@ excerpt: "For my M.Sc. at NUS, I studied what makes song lyrics easy or hard to 
 collection: portfolio
 date: 2018-01-01
 header:
-  teaser: teasers/singing-teaser.jpg
+  teaser: teasers/singing-teaser.svg
+  teaser_alt: "A singer sends the same lyric line three times: crisp next to High intelligibility, smudged next to Medium, and dissolving into music notes next to Low"
 ---
 
 **Duration:** 2017 – 2018  

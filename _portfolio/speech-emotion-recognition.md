@@ -4,7 +4,8 @@ excerpt: "At Emobot, I led research on automatic speech emotion recognition — 
 collection: portfolio
 date: 2024-01-01
 header:
-  teaser: teasers/ser-teaser.jpg
+  teaser: teasers/ser-teaser.svg
+  teaser_alt: "Illustrative speech waveforms for angry, happy, sad, fearful and neutral delivery"
 ---
 
 **Duration:** 2023 – 2024  

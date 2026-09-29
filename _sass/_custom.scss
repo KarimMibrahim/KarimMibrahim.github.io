@@ -498,6 +498,10 @@ td > code {
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5em;
   margin-top: 1em;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .grid__item {
@@ -526,15 +530,20 @@ td > code {
     }
   }
 
+  /* teaser figures are drawn at 2:1 by scripts/teasers/make_teasers.py */
   .archive__item-teaser {
     border-radius: 0;
     overflow: hidden;
     max-height: none;
+    padding: 0.5em 0.5em 0.25em;
+    background: #fff;
+    border-bottom: 1px solid $border-color;
 
     img {
       width: 100%;
-      height: 200px;
-      object-fit: cover;
+      height: auto;
+      aspect-ratio: 2 / 1;
+      object-fit: contain;
       border-radius: 0;
       display: block;
     }
