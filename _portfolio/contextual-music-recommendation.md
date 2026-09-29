@@ -4,7 +4,8 @@ excerpt: "My PhD project at Télécom Paris and Deezer, studying how listening c
 collection: portfolio
 date: 2022-01-01
 header:
-  teaser: teasers/context-teaser.jpg
+  teaser: teasers/context-teaser.svg
+  teaser_alt: "Heatmap of the share of Deezer streams per hour of day for twelve listening situations, from running and work in the morning to night and sleep after midnight"
 ---
 
 **Duration:** 2018 – 2022  

@@ -142,6 +142,7 @@ exclude:
   - package.json
   - Rakefile
   - README
+  - scripts
   - tmp
 keep_files:
   - .git

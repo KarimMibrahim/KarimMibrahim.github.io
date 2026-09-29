@@ -4,7 +4,8 @@ excerpt: "My first research project, spanning my M.Sc. at Nile University and an
 collection: portfolio
 date: 2016-01-01
 header:
-  teaser: teasers/pae-teaser.jpg
+  teaser: teasers/pae-teaser.svg
+  teaser_alt: "Spectrograms of a stereo mix and of the primary and ambient components extracted from it with adaptive-weighting PCA"
 ---
 
 **Duration:** 2015 – 2018  

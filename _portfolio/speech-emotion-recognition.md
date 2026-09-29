@@ -4,7 +4,8 @@ excerpt: "At Emobot, I led research on automatic speech emotion recognition — 
 collection: portfolio
 date: 2024-01-01
 header:
-  teaser: teasers/ser-teaser.jpg
+  teaser: teasers/ser-teaser.svg
+  teaser_alt: "Speech emotion recognition accuracy on IEMOCAP and RAVDESS when training on original data, with audio augmentation, or with emotion-converted synthetic speech"
 ---
 
 **Duration:** 2023 – 2024  
